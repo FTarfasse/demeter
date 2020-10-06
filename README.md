@@ -2,30 +2,44 @@
 Demeter gardening project
 
 Back-end:
-- [ ] Unit tests
-- [ ] Integration tests
 - [ ] Design
 - [ ] Routes
 - [ ] Pagination
 - [ ] Authentification
 - [ ] Authorisation
-- [ ] SEO
+- [ ] Interceptor for logging all requests
+- [ ] Configure datasources: PostGreSQL for business. Cassandra for logging.
+- [ ] Redirection & Forwarding
+- [ ] Cache (Redis ?)
+- [ ] message broker (Kafka)
 - [ ] Weather API integration
 - [ ] Batch mail alerts / notifications
 
 Front-end:
-  - [ ] Unit tests
-  - [ ] Integration tests
-  - [ ] Generation
-  
+  - [ ] Fanny animations etc ?
+  - [ ] SEO
+
+General:
+- [ ] Documentation
+- [ ] Unit tests
+- [ ] Integration tests
+
 Utils:
   - [ ] Component hierarchy graph
   
 Infrastructure:
   - [ ] Containers
   - [ ] Cilium container firewall
-  - [ ] Message broker
+  - [ ] CI ?
   
 Data model:
   - [ ] Design
   - [ ] Sample data
+
+Libs to play around:
+  - [ ] springDoc
+  - [ ] Hoverfly
+  - [ ] PowerMock
+  - [ ] rest-assured
+  - [ ] QuickPerf
+  - [ ] JPAStream
