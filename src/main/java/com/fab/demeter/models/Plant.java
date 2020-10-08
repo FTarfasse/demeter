@@ -1,18 +1,25 @@
 package com.fab.demeter.models;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "plant")
+@DynamicUpdate
 public class Plant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private long id;
 //    @NotBlank(message = "Name should not be empty.") // validation at controller level
 //    @Column(nullable = false) // validation at db level
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
+    @Size(min = 1, message = "Name should be at least one character")
     private String name;
     @Column(name = "sow_instructions")
     private String sowInstructions;
