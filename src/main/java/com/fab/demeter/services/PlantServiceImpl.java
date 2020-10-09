@@ -3,7 +3,6 @@ package com.fab.demeter.services;
 import com.fab.demeter.models.Plant;
 import com.fab.demeter.repositories.PlantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +20,8 @@ public class PlantServiceImpl implements PlantService {
     }
 
     @Override
-    public Optional<Plant> getPlantById(long id) {
-        return Optional.of(this.repository.getOne(id));
+    public Plant getPlantById(long id) {
+        return this.repository.getOne(id);
     }
 
     @Override

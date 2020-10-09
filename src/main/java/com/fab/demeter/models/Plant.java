@@ -1,5 +1,6 @@
 package com.fab.demeter.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
@@ -7,17 +8,18 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "plant")
 @DynamicUpdate
-public class Plant {
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class Plant implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private long id;
-//    @NotBlank(message = "Name should not be empty.") // validation at controller level
-//    @Column(nullable = false) // validation at db level
+    @NotBlank(message = "Name should not be empty.") // validation at controller level
     @Column(name = "name", nullable = false)
     @Size(min = 1, message = "Name should be at least one character")
     private String name;
@@ -37,6 +39,11 @@ public class Plant {
     private String culinaryPreservation;
 
     public Plant() {
+    }
+
+    public Plant(long id, @NotBlank String name) {
+        this.id = id;
+        this.name = name;
     }
 
     public Plant(@NotBlank String name) {

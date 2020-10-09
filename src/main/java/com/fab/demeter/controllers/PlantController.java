@@ -9,14 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RequestMapping("v0/api/plants")
 @RestController("plantController")
@@ -27,22 +25,23 @@ public class PlantController {
     @Autowired
     private PlantService service;
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Plant>> getAllPlants(){
         this.log.info("Returning all the plants !");
         return new ResponseEntity<>(service.getAllPlants(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Plant> getPlantById(@PathVariable("id") long id){
         this.log.info("Returning plant with id: " + id);
-        Optional<Plant> searchedPlant = this.service.getPlantById(id);
+//        Optional<Plant> searchedPlant = this.service.getPlantById(id);
+        Plant searchedPlant = this.service.getPlantById(id);
 
-        if(searchedPlant.isEmpty() || searchedPlant.get().getId() <= 0){
+        if(searchedPlant == null || searchedPlant.getId() <= 0){
             throw new PlantNotFoundException("Plant with id " + id + " doesn't exist !");
         }
 
-        return new ResponseEntity<Plant>(searchedPlant.get(), HttpStatus.OK) ;
+        return new ResponseEntity<>(searchedPlant, HttpStatus.OK) ;
     }
 
     /**
@@ -56,9 +55,9 @@ public class PlantController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> removePlant(@PathVariable("id") long id){
         this.log.info("Deleting plant with id: " + id);
-        Optional<Plant> plantToDelete = this.service.getPlantById(id);
+        Plant plantToDelete = this.service.getPlantById(id);
 
-        if(plantToDelete.isEmpty() || plantToDelete.get().getId() <= 0){
+        if(plantToDelete == null || plantToDelete.getId() <= 0){
             throw new PlantNotFoundException("Plant with id " + id + " doesn't exist !");
         }
 
@@ -68,11 +67,11 @@ public class PlantController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.PATCH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updatePlant(@RequestBody Plant plant){
+    public ResponseEntity<Void> updatePlant(@RequestBody @Valid Plant plant){
         log.info("Plant to update " + plant);
-        Optional<Plant> plantOptional = this.service.getPlantById(plant.getId());
+        Plant plantOptional = this.service.getPlantById(plant.getId());
 
-        if(plantOptional.isEmpty() || plantOptional.get().getId() <= 0){
+        if(plantOptional == null || plantOptional.getId() <= 0){
             return ResponseEntity.notFound().build();
         }
 
@@ -82,12 +81,12 @@ public class PlantController {
     }
 
     // add Plant validation with BindingResult
-    @RequestMapping(value = "", method = RequestMethod.POST)
+    @RequestMapping(value = "", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createPlant(@RequestBody @Valid Plant plant, HttpServletRequest request){
         log.info("Plant to create " + plant);
-        Optional<Plant> plantToCreate = this.service.getPlantById(plant.getId());
+        Plant plantToCreate = this.service.getPlantById(plant.getId());
 
-        if(plantToCreate.isEmpty() || plantToCreate.get().getId() <= 0){
+        if(plantToCreate == null || plantToCreate.getId() <= 0){
             throw new PlantNotFoundException("Malformed data !");
         }
 

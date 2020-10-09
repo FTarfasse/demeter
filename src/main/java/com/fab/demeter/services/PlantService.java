@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface PlantService {
     List<Plant> getAllPlants();
-    Optional<Plant> getPlantById(long id);
+    Plant getPlantById(long id);
     Plant savePlant(Plant plant);
     void deletePlantById(long id);
 }

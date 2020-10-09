@@ -11,7 +11,7 @@ public interface PlantRepository extends JpaRepository<Plant, Long> {
 
 //    @Query("SELECT p FROM Plant p WHERE p.name LIKE %:name%")
 //    List<Plant> findPlantNameLike(@Param("name") String name);
-
+    Plant findById(long id);
     void deletePlantById(long id);
 
 //    @Modifying(clearAutomatically = true, flushAutomatically = true)
