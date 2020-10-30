@@ -15,38 +15,47 @@ import java.io.Serializable;
 @DynamicUpdate
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Plant implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id", nullable = false, updatable = false, columnDefinition = "smallint")
     private long id;
+
     @NotBlank(message = "Name should not be empty.") // validation at controller level
     @Column(name = "name", nullable = false)
     @Size(min = 1, message = "Name should be at least one character")
     private String name;
+
     @Column(name = "sow_instructions")
     private String sowInstructions;
+
     @Column(name = "space_instructions")
     private String spaceInstructions;
+
     @Column(name = "harvest_instructions")
     private String harvestInstructions;
+
     @Column(name = "compatible_plants")
     private String compatiblePlants;
+
     @Column(name = "avoid_instructions")
     private String avoidInstructions;
+
     @Column(name = "culinary_hints", length = 10000)
     private String culinaryHints;
+
     @Column(name = "culinary_preservation")
     private String culinaryPreservation;
 
     public Plant() {
     }
 
-    public Plant(long id, @NotBlank String name) {
-        this.id = id;
+    public Plant(@NotBlank String name) {
         this.name = name;
     }
 
-    public Plant(@NotBlank String name) {
+    public Plant(long id, @NotBlank String name) {
+        this.id = id;
         this.name = name;
     }
 

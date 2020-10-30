@@ -2,6 +2,8 @@ package com.fab.demeter.controllers;
 
 import com.fab.demeter.models.Plant;
 import com.fab.demeter.services.PlantService;
+import com.fab.demeter.utils.PlantException;
+import com.fab.demeter.utils.PlantFormatException;
 import com.fab.demeter.utils.PlantNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,13 +11,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
+import org.springframework.util.ObjectUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
+//@Validated
 @RequestMapping("v0/api/plants")
 @RestController("plantController")
 public class PlantController {
@@ -67,32 +73,38 @@ public class PlantController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.PATCH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updatePlant(@RequestBody @Valid Plant plant){
+//    public ResponseEntity<Void> updatePlant(@RequestBody @Valid Plant plant){
+    public ResponseEntity<Void> updatePlant(@RequestBody Plant plant){
         log.info("Plant to update " + plant);
         Plant plantOptional = this.service.getPlantById(plant.getId());
 
         if(plantOptional == null || plantOptional.getId() <= 0){
-            return ResponseEntity.notFound().build();
+            throw new PlantNotFoundException("Plant with id " + plant.getId() + " doesn't exist !");
         }
 
-        this.service.savePlant(plant);
+        this.service.createPlant(plant);
 
         return ResponseEntity.noContent().build();
     }
 
     // add Plant validation with BindingResult
     @RequestMapping(value = "", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createPlant(@RequestBody @Valid Plant plant, HttpServletRequest request){
+//    public ResponseEntity<?> createPlant(@RequestBody @Valid Plant plant, HttpServletRequest request){
+    public ResponseEntity<?> createPlant(@Valid @RequestBody Plant plant) throws PlantFormatException {
         log.info("Plant to create " + plant);
-        Plant plantToCreate = this.service.getPlantById(plant.getId());
+//        Plant plantToCreate = this.service.getPlantById(plant.getId());
 
-        if(plantToCreate == null || plantToCreate.getId() <= 0){
-            throw new PlantNotFoundException("Malformed data !");
-        }
+//        if(!ObjectUtils.isEmpty()){
+//            throw new PlantFormatException("Malformed data !");
+//        }
 
-        this.service.savePlant(plant);
-        URI location = URI.create(request.getRequestURL().toString());
-        // ResponseEntity(body, headers, http status code)
+        this.service.createPlant(plant);
+//        URI location = URI.create(request.getRequestURL().toString());
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                            .path("/{id}")
+                            .buildAndExpand(plant.getId())
+                            .toUri();
+
         return ResponseEntity.created(location).build();
     }
 

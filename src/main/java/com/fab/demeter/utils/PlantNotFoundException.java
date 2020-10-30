@@ -1,6 +1,10 @@
 package com.fab.demeter.utils;
 
-public final class PlantNotFoundException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(code = HttpStatus.NOT_FOUND)
+public class PlantNotFoundException extends PlantException {
 
     public PlantNotFoundException() {
     }
@@ -12,5 +16,4 @@ public final class PlantNotFoundException extends RuntimeException {
     public PlantNotFoundException(String message, Throwable cause) {
         super(message, cause);
     }
-
 }

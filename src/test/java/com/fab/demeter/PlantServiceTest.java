@@ -11,11 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -64,7 +61,7 @@ public class PlantServiceTest {
     public void savePlantTest(){
         Plant apple = new Plant(6L, "apple");
         Mockito.when(this.repository.save(apple)).thenReturn(apple);
-        Plant result = this.service.savePlant(apple);
+        Plant result = this.service.createPlant(apple);
 
         Assertions.assertEquals(6, result.getId());
         Assertions.assertEquals("apple", result.getName());

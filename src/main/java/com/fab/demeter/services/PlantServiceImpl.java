@@ -25,7 +25,7 @@ public class PlantServiceImpl implements PlantService {
     }
 
     @Override
-    public Plant savePlant(Plant plant) {
+    public Plant createPlant(Plant plant) {
         return this.repository.save(plant);
     }
 
